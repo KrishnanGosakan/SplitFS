@@ -1804,7 +1804,7 @@ int nvp_retrieve_inode_mapping(struct NVNode *node)
 		
 		// Copy the root_dirty_cache from the global mmap() cache on to the node mmap() cache
 		//if(mappingToBeRetrieved->root_dirty_num)
-		memcpy(node->root_dirty_cache, mappingToBeRetrieved->root_dirty_cache, 20 * sizeof(unsigned long));
+		memcpy(node->root_dirty_cache, mappingToBeRetrieved->root_dirty_cache, mappingToBeRetrieved->root_dirty_num * sizeof(unsigned long));
 		
 		node->root_dirty_num = mappingToBeRetrieved->root_dirty_num;
 		node->total_dirty_mmaps = mappingToBeRetrieved->total_dirty_mmaps;
@@ -5816,7 +5816,9 @@ RETT_FTRUNC64 _nvp_FTRUNC64(INTF_FTRUNC64)
 	if (nvf->node->true_length >= LARGE_FILE_THRESHOLD)
 		nvf->node->is_large_file = 1;
 	START_TIMING(clear_mmap_tbl_t, clear_mmap_tbl_time);
-	clear_tbl_mmap_entry(tbl_app, NUM_APP_TBL_MMAP_ENTRIES);
+	if(tbl_app)
+		clear_tbl_mmap_entry(tbl_app, NUM_APP_TBL_MMAP_ENTRIES);
+	if(tbl_over)
 	clear_tbl_mmap_entry(tbl_over, NUM_OVER_TBL_MMAP_ENTRIES);
 	END_TIMING(clear_mmap_tbl_t, clear_mmap_tbl_time);
 
